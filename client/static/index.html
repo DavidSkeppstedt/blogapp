@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Blog</title>
+	<style type="text/css">
+		body{
+			font-family: Georgia;
+		}
+
+		.post{
+			font-family: helvetica;
+			border-bottom: 1px solid #888;
+			width: auto;
+		}
+
+		.post-title{
+			margin-bottom: 0;
+			margin-left: 2.0em;
+			font-family: 'Lucida Grande';
+		}
+
+		.post-body{
+			font-family: Georgia;
+			color:#222;
+			font-size: 18px;
+			line-height: 2;
+			font-weight: 400;
+			letter-spacing: 0;
+			word-wrap: break-word;
+			margin-left: 2.3em;
+			margin-right: 2.3em;
+			padding: 5px;
+			max-width: 80%;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		.post-by{
+			margin: 0 0;
+			font-style: italic;
+			color: #888;
+			margin-left: 2.8em;
+			
+
+		}
+
+		.post-time{
+			font-style: italic;
+			color: #888;
+		}
+
+
+
+	</style>
+</head>
+<body>
+<div id = 'post'>
+</div>
+</body>
+<script type="text/javascript">
+	console.log("Hello?");
+	var container = document.getElementById("post");
+	var httpRequest = new XMLHttpRequest();
+	httpRequest.onreadystatechange = done;
+	httpRequest.open('GET','/api/1/posts');
+	httpRequest.setRequestHeader('Accept', 'application/json');
+	httpRequest.send();
+
+	function done() {
+		if (httpRequest.readyState == XMLHttpRequest.DONE) {
+			if (httpRequest.status === 200) {
+				var response = JSON.parse(httpRequest.responseText);
+				
+				response.data.forEach(function(item){
+					console.log(item);
+
+					var articleDiv = document.createElement("div");
+					articleDiv.id = "post-"+item.id;
+					articleDiv.className = "post"
+
+					var heading = document.createElement("h2");
+					heading.className="post-title"
+					var headingNode = document.createTextNode(item.title);
+					heading.appendChild(headingNode);
+
+					var byPara = document.createElement("p");
+					byPara.className = "post-by";
+					var byNode = document.createTextNode("Posted by: " + item.author);
+					byPara.appendChild(byNode);
+
+					var bodyPara = document.createElement("pre");
+					bodyPara.className = "post-body"
+					var bodyNode = document.createTextNode(item.Body);
+					bodyPara.appendChild(bodyNode);
+
+					var timePara = document.createElement("p");
+					timePara.className = "post-time"
+					var timeNode = document.createTextNode("Published: " + item.created_at);
+					timePara.appendChild(timeNode);
+
+
+					articleDiv.appendChild(heading);
+					articleDiv.appendChild(byPara);
+					articleDiv.appendChild(bodyPara);
+					articleDiv.appendChild(timePara);
+
+					container.appendChild(articleDiv)
+				});
+
+			} else {
+				console.log('There was a problem with the request.');
+			}
+		}
+	}
+
+
+</script>
+</html>
