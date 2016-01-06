@@ -33,10 +33,13 @@ func wrapHandler(h http.Handler) httprouter.Handle {
 		h.ServeHTTP(w, r)
 	}
 }
-func NewRouter() *router {
-	appC := appContext{}
+func NewRouter(app *appContext) *router {
 	commonHandlers := alice.New(context.ClearHandler, loggingHandler, recoverHandler, acceptHandler)
+
 	router := &router{httprouter.New()}
-	router.Get("/", commonHandlers.ThenFunc(appC.helloHandler))
+
+	//Posts resource
+	router.Get("/api/1/posts/", commonHandlers.ThenFunc(app.postsHandler))
+
 	return router
 }
