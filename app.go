@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/DavidSkeppstedt/blog/database"
+	"github.com/DavidSkeppstedt/blog/api"
 )
 
 //Entrypoint for the api server
 func main() {
-	database.Open()
+
+	api.Start()
 }
