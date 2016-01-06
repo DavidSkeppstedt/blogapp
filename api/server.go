@@ -5,6 +5,6 @@ import (
 )
 
 func Start() {
-	http.HandleFunc("/posts", posts)
-	http.ListenAndServe(":8080", nil)
+	router := NewRouter()
+	http.ListenAndServe(":8080", router)
 }
